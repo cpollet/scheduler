@@ -44,7 +44,7 @@ public class DynamicExecutableJobFactory implements ExecutableJobFactory {
     }
 
     @Override
-    public ExecutableJob create(String type, Map<String, List<String>> parameters, Trigger trigger) {
+    public ExecutableJob create(String type, Map<String, List<String>> parameters, Trigger trigger) throws JobNameNotRegisteredException {
         if (!clazz.containsKey(type)) {
             throw new JobNameNotRegisteredException(type);
         }

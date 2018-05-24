@@ -27,7 +27,7 @@ public class InMemoryJobStore implements JobStore {
     }
 
     @Override
-    public Job get(JobId jobId) {
+    public Job get(JobId jobId) throws ElementNotFoundException {
         if (!jobs.containsKey(jobId)) {
             throw new ElementNotFoundException(jobId.toString());
         }
