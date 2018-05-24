@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableSet;
 import net.cpollet.scheduler.engine.api.Job;
 import net.cpollet.scheduler.engine.api.JobId;
 import net.cpollet.scheduler.engine.api.PeriodicTrigger;
-import net.cpollet.scheduler.engine.api.Status;
 import net.cpollet.scheduler.engine.internals.ExecutableJobFactory;
 import net.cpollet.scheduler.engine.internals.ExecutableJobStoreAdapter;
 import net.cpollet.scheduler.engine.internals.job.ExecutableJob;
@@ -44,7 +43,7 @@ public class SpringSchedulerTest {
         SpringTrigger trigger = Mockito.mock(SpringTrigger.class);
         Mockito.when(trigger.trigger()).thenReturn(springTrigger);
 
-        ExecutableJob job = new ExecutableJobStub(null, trigger, Status.STOPPED);
+        ExecutableJob job = new ExecutableJobStub(null, trigger, Job.Status.STOPPED);
         jobId = job.getJobId();
 
         Mockito.when(jobFactory.create(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any()))
@@ -64,7 +63,7 @@ public class SpringSchedulerTest {
                 .schedule(Mockito.any(), ArgumentMatchers.eq(springTrigger));
 
         Assertions.assertThat(startedJob.getStatus())
-                .isEqualTo(Status.RUNNING);
+                .isEqualTo(Job.Status.RUNNING);
     }
 
     @Test
@@ -77,7 +76,7 @@ public class SpringSchedulerTest {
         Mockito.verify(jobStore, Mockito.atLeast(1)).save(captor.capture());
 
         Assertions.assertThat(captor.getValue().getStatus())
-                .isEqualTo(Status.RUNNING);
+                .isEqualTo(Job.Status.RUNNING);
     }
 
     @Test
@@ -90,7 +89,7 @@ public class SpringSchedulerTest {
                 .schedule(Mockito.any(), ArgumentMatchers.eq(springTrigger));
 
         Assertions.assertThat(startedJob.getStatus())
-                .isEqualTo(Status.RUNNING);
+                .isEqualTo(Job.Status.RUNNING);
     }
 
     @Test
@@ -103,20 +102,20 @@ public class SpringSchedulerTest {
         Mockito.verify(jobStore, Mockito.atLeast(1)).save(captor.capture());
 
         Assertions.assertThat(captor.getValue().getStatus())
-                .isEqualTo(Status.RUNNING);
+                .isEqualTo(Job.Status.RUNNING);
     }
 
     @Test
     public void start_isNoOp_whenJobStarted() {
         // GIVEN
-        jobStore.get(jobId).setStatus(Status.RUNNING);
+        jobStore.get(jobId).setStatus(Job.Status.RUNNING);
 
         // WHEN
         Job startedJob = scheduler.start(jobId);
 
         // THEN
         Assertions.assertThat(startedJob.getStatus())
-                .isEqualTo(Status.RUNNING);
+                .isEqualTo(Job.Status.RUNNING);
 
         Mockito.verify(taskScheduler, Mockito.never())
                 .schedule(Mockito.any(), ArgumentMatchers.eq(springTrigger));
@@ -138,7 +137,7 @@ public class SpringSchedulerTest {
 
         // THEN
         Assertions.assertThat(stoppedJob.getStatus())
-                .isEqualTo(Status.STOPPED);
+                .isEqualTo(Job.Status.STOPPED);
 
         Mockito.verify(future, Mockito.times(1))
                 .cancel(true);
@@ -160,7 +159,7 @@ public class SpringSchedulerTest {
         Mockito.verify(jobStore, Mockito.atLeast(1)).save(captor.capture());
 
         Assertions.assertThat(captor.getValue().getStatus())
-                .isEqualTo(Status.STOPPED);
+                .isEqualTo(Job.Status.STOPPED);
     }
 
     @Test
@@ -175,7 +174,7 @@ public class SpringSchedulerTest {
 
         // THEN
         Assertions.assertThat(stoppedJob.getStatus())
-                .isEqualTo(Status.STOPPED);
+                .isEqualTo(Job.Status.STOPPED);
 
         Mockito.verify(future, Mockito.never())
                 .cancel(ArgumentMatchers.anyBoolean());
@@ -197,7 +196,7 @@ public class SpringSchedulerTest {
 
         // THEN
         Assertions.assertThat(deletedJob.getStatus())
-                .isEqualTo(Status.STOPPED);
+                .isEqualTo(Job.Status.STOPPED);
 
         Mockito.verify(future, Mockito.times(1))
                 .cancel(true);
@@ -223,8 +222,8 @@ public class SpringSchedulerTest {
     @Test
     public void allJobs_returnsAllJobs() {
         // GIVEN
-        ExecutableJob job1 = new ExecutableJobStub(null, null, Status.STOPPED);
-        ExecutableJob job2 = new ExecutableJobStub(null, null, Status.STOPPED);
+        ExecutableJob job1 = new ExecutableJobStub(null, null, Job.Status.STOPPED);
+        ExecutableJob job2 = new ExecutableJobStub(null, null, Job.Status.STOPPED);
         Mockito.when(jobStore.getAll()).thenReturn(Arrays.asList(job1, job2));
 
         // WHEN

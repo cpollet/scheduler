@@ -3,7 +3,6 @@ package net.cpollet.scheduler.engine.internals.job;
 import lombok.extern.slf4j.Slf4j;
 import net.cpollet.scheduler.engine.api.ExecutionContext;
 import net.cpollet.scheduler.engine.api.ExecutionResult;
-import net.cpollet.scheduler.engine.api.Status;
 import net.cpollet.scheduler.engine.api.Trigger;
 
 import java.util.List;

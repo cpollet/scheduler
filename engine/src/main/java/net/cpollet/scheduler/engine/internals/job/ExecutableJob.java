@@ -4,12 +4,10 @@ import net.cpollet.scheduler.engine.api.ExecutionContext;
 import net.cpollet.scheduler.engine.api.ExecutionResult;
 import net.cpollet.scheduler.engine.api.Job;
 import net.cpollet.scheduler.engine.api.JobId;
-import net.cpollet.scheduler.engine.api.Status;
 import net.cpollet.scheduler.engine.api.Trigger;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 public abstract class ExecutableJob implements Job {
     protected final JobId jobId;

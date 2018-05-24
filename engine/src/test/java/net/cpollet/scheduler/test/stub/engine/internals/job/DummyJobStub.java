@@ -2,7 +2,6 @@ package net.cpollet.scheduler.test.stub.engine.internals.job;
 
 import net.cpollet.scheduler.engine.api.Job;
 import net.cpollet.scheduler.engine.api.JobId;
-import net.cpollet.scheduler.engine.api.Status;
 import net.cpollet.scheduler.engine.api.Trigger;
 
 import java.util.List;

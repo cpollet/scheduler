@@ -1,25 +1,20 @@
 package net.cpollet.scheduler.engine.internals.spring;
 
-import com.google.common.collect.ImmutableCollection;
 import lombok.extern.slf4j.Slf4j;
 import net.cpollet.scheduler.engine.api.ExecutionContext;
 import net.cpollet.scheduler.engine.api.ExecutionId;
 import net.cpollet.scheduler.engine.api.Job;
 import net.cpollet.scheduler.engine.api.ExecutionResult;
 import net.cpollet.scheduler.engine.api.JobId;
-import net.cpollet.scheduler.engine.api.Status;
 import net.cpollet.scheduler.engine.api.PeriodicTrigger;
 import net.cpollet.scheduler.engine.api.Scheduler;
-import net.cpollet.scheduler.engine.internals.DynamicExecutableJobFactory;
 import net.cpollet.scheduler.engine.internals.ExecutableJobFactory;
-import net.cpollet.scheduler.engine.internals.ExecutableJobStoreAdapter;
 import net.cpollet.scheduler.engine.internals.Store;
 import net.cpollet.scheduler.engine.internals.job.ExecutableJob;
 import org.slf4j.MDC;
 import org.springframework.scheduling.TaskScheduler;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -27,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ScheduledFuture;
-import java.util.stream.Collectors;
 
 @Slf4j
 public class SpringScheduler implements Scheduler {
@@ -68,7 +62,7 @@ public class SpringScheduler implements Scheduler {
         Job job = stop(jobId);
 
         jobStore.delete(jobId);
-        job.setStatus(Status.STOPPED);
+        job.setStatus(Job.Status.STOPPED);
 
         return job;
     }
@@ -77,14 +71,14 @@ public class SpringScheduler implements Scheduler {
     public Job stop(JobId jobId) {
         ExecutableJob job = jobStore.get(jobId);
 
-        if (job.getStatus() == Status.STOPPED) {
+        if (job.getStatus() == Job.Status.STOPPED) {
             return job;
         }
 
         scheduledJobs.get(jobId).cancel(true);
         scheduledJobs.remove(jobId);
 
-        job.setStatus(Status.STOPPED);
+        job.setStatus(Job.Status.STOPPED);
         jobStore.save(job);
 
         return job;
@@ -94,7 +88,7 @@ public class SpringScheduler implements Scheduler {
     public Job start(JobId jobId) {
         ExecutableJob job = jobStore.get(jobId);
 
-        if (job.getStatus() == Status.RUNNING) {
+        if (job.getStatus() == Job.Status.RUNNING) {
             return job;
         }
 
@@ -109,7 +103,7 @@ public class SpringScheduler implements Scheduler {
         ScheduledFuture<?> future = taskScheduler.schedule(runnable, ((SpringTrigger) job.getTrigger()).trigger());
         scheduledJobs.put(job.getJobId(), future);
 
-        job.setStatus(Status.RUNNING);
+        job.setStatus(Job.Status.RUNNING);
 
         jobStore.save(job);
         return job;

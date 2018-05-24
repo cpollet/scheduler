@@ -10,4 +10,8 @@ public interface Job {
     Status getStatus();
     void setStatus(Status status);
     String getType();
+
+    enum Status {
+        RUNNING, STOPPED
+    }
 }
