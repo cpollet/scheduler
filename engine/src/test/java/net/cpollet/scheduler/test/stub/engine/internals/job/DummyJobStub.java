@@ -31,11 +31,6 @@ public class DummyJobStub implements Job {
     }
 
     @Override
-    public void setStatus(Status status) {
-
-    }
-
-    @Override
     public String getType() {
         return null;
     }

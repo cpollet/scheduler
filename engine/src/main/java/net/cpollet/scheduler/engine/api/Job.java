@@ -8,7 +8,6 @@ public interface Job {
     Trigger getTrigger();
     Map<String, List<String>> getParameters();
     Status getStatus();
-    void setStatus(Status status);
     String getType();
 
     enum Status {

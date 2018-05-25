@@ -13,6 +13,7 @@
         <module>engine</module>
         <module>engine-spring</module>
         <module>datastore-inmemory</module>
+        <module>datastore-nitrite</module>
         <module>ws</module>
     </modules>
 

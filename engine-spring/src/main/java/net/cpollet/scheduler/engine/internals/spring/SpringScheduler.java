@@ -59,7 +59,9 @@ public class SpringScheduler implements Scheduler {
 
     @Override
     public Job delete(JobId jobId) {
-        Job job = stop(jobId);
+        stop(jobId);
+
+        ExecutableJob job = jobStore.get(jobId);
 
         jobStore.delete(jobId);
         job.setStatus(Job.Status.STOPPED);

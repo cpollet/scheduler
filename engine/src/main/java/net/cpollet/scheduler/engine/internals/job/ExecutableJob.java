@@ -50,7 +50,6 @@ public abstract class ExecutableJob implements Job {
         return status;
     }
 
-    @Override
     public void setStatus(Status status) {
         this.status = status;
     }

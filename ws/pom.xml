@@ -27,6 +27,11 @@
         </dependency>
         <dependency>
             <groupId>net.cpollet.scheduler</groupId>
+            <artifactId>datastore-nitrite</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.cpollet.scheduler</groupId>
             <artifactId>engine-spring</artifactId>
             <version>${project.version}</version>
         </dependency>
