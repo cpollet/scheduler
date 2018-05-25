@@ -1,7 +1,7 @@
 package net.cpollet.scheduler.engine.internals;
 
 import lombok.extern.slf4j.Slf4j;
-import net.cpollet.scheduler.engine.api.InvalidJobClassException;
+import net.cpollet.scheduler.engine.api.exception.InvalidJobClassException;
 import net.cpollet.scheduler.engine.api.JobId;
 import net.cpollet.scheduler.engine.api.exception.JobNameNotRegisteredException;
 import net.cpollet.scheduler.engine.api.Trigger;

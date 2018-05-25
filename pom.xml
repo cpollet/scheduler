@@ -10,6 +10,7 @@
     <description>aggregator</description>
 
     <modules>
+        <module>engine-api</module>
         <module>engine</module>
         <module>engine-spring</module>
         <module>datastore-inmemory</module>

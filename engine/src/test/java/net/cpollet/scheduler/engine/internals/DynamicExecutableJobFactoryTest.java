@@ -1,6 +1,6 @@
 package net.cpollet.scheduler.engine.internals;
 
-import net.cpollet.scheduler.engine.api.InvalidJobClassException;
+import net.cpollet.scheduler.engine.api.exception.InvalidJobClassException;
 import net.cpollet.scheduler.engine.api.exception.JobNameNotRegisteredException;
 import net.cpollet.scheduler.engine.api.Trigger;
 import net.cpollet.scheduler.engine.internals.job.ExecutableJob;

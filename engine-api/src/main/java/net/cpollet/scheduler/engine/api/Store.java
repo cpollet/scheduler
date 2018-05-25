@@ -1,4 +1,4 @@
-package net.cpollet.scheduler.engine.internals;
+package net.cpollet.scheduler.engine.api;
 
 import net.cpollet.scheduler.engine.api.exception.ElementNotFoundException;
 

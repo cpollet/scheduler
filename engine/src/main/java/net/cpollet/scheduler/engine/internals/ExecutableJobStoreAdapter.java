@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import net.cpollet.scheduler.engine.api.Job;
 import net.cpollet.scheduler.engine.api.JobId;
 import net.cpollet.scheduler.engine.api.JobStore;
+import net.cpollet.scheduler.engine.api.Store;
 import net.cpollet.scheduler.engine.internals.job.ExecutableJob;
 
 import java.util.Collection;
