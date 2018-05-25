@@ -1,6 +1,7 @@
 package net.cpollet.scheduler.engine.internals;
 
 import net.cpollet.scheduler.engine.api.Job;
+import net.cpollet.scheduler.engine.api.JobId;
 import net.cpollet.scheduler.engine.internals.job.ExecutableJob;
 import net.cpollet.scheduler.test.stub.engine.api.JobStoreStub;
 import net.cpollet.scheduler.test.stub.engine.api.JobStub;
@@ -26,7 +27,7 @@ public class ExecutableJobStoreAdapterTest {
     @Test
     public void get_returnsSameAdaptedSavedJob() {
         // GIVEN
-        ExecutableJob expectedJob = new JobStub(null, null);
+        ExecutableJob expectedJob = new JobStub(new JobId(), null, null);
 
         // WHEN
         store.save(expectedJob);

@@ -43,7 +43,7 @@ public class SpringSchedulerTest {
         SpringTrigger trigger = Mockito.mock(SpringTrigger.class);
         Mockito.when(trigger.trigger()).thenReturn(springTrigger);
 
-        ExecutableJob job = new ExecutableJobStub(null, trigger, Job.Status.STOPPED);
+        ExecutableJob job = new ExecutableJobStub(new JobId(), null, trigger, Job.Status.STOPPED);
         jobId = job.getJobId();
 
         Mockito.when(jobFactory.create(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any()))
@@ -222,8 +222,8 @@ public class SpringSchedulerTest {
     @Test
     public void allJobs_returnsAllJobs() {
         // GIVEN
-        ExecutableJob job1 = new ExecutableJobStub(null, null, Job.Status.STOPPED);
-        ExecutableJob job2 = new ExecutableJobStub(null, null, Job.Status.STOPPED);
+        ExecutableJob job1 = new ExecutableJobStub(new JobId(), null, null, Job.Status.STOPPED);
+        ExecutableJob job2 = new ExecutableJobStub(new JobId(), null, null, Job.Status.STOPPED);
         Mockito.when(jobStore.getAll()).thenReturn(Arrays.asList(job1, job2));
 
         // WHEN

@@ -23,7 +23,7 @@ public class SchedulerRestAdapter {
 
     public List<JobResponse> all() {
         return scheduler.allJobs().stream()
-                .map(e -> mapToRest(e, Status.RUNNING))
+                .map(e -> mapToRest(e, Status.RUNNING))// FIXME status conversion
                 .collect(Collectors.toList());
     }
 

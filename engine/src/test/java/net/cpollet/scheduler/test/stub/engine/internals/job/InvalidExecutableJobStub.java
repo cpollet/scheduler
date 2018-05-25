@@ -2,6 +2,7 @@ package net.cpollet.scheduler.test.stub.engine.internals.job;
 
 import net.cpollet.scheduler.engine.api.ExecutionContext;
 import net.cpollet.scheduler.engine.api.ExecutionResult;
+import net.cpollet.scheduler.engine.api.JobId;
 import net.cpollet.scheduler.engine.api.Trigger;
 import net.cpollet.scheduler.engine.internals.job.ExecutableJob;
 import net.cpollet.scheduler.engine.internals.job.JobTypeName;
@@ -11,8 +12,8 @@ import java.util.Map;
 
 @JobTypeName("Invalid")
 public class InvalidExecutableJobStub extends ExecutableJob {
-    public InvalidExecutableJobStub(Map<String, List<String>> parameters, Trigger trigger, Status status) {
-        super(parameters, trigger, status);
+    public InvalidExecutableJobStub(JobId jobId, Map<String, List<String>> parameters, Trigger trigger, Status status) {
+        super(jobId, parameters, trigger, status);
     }
 
     @Override

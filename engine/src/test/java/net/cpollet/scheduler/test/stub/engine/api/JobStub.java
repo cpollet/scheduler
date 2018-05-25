@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 public class JobStub extends ExecutableJob {
-    public JobStub(Map<String, List<String>> parameters, Trigger trigger) {
-        super(parameters, trigger, null);
+    public JobStub(JobId jobId, Map<String, List<String>> parameters, Trigger trigger) {
+        super(jobId, parameters, trigger, null);
     }
 
     @Override

@@ -16,8 +16,8 @@ public abstract class ExecutableJob implements Job {
     protected Status status;
     private final JobTypeNameReader jobTypeNameReader;
 
-    public ExecutableJob(Map<String, List<String>> parameters, Trigger trigger, Status status) {
-        this.jobId = new JobId();
+    public ExecutableJob(JobId jobId, Map<String, List<String>> parameters, Trigger trigger, Status status) {
+        this.jobId = jobId;
         this.parameters = parameters;
         this.trigger = trigger;
         this.status = status;

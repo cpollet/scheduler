@@ -77,8 +77,10 @@ public class SpringScheduler implements Scheduler {
             return job;
         }
 
-        scheduledJobs.get(jobId).cancel(true);
-        scheduledJobs.remove(jobId);
+        if (scheduledJobs.containsKey(jobId)) {
+            scheduledJobs.get(jobId).cancel(true);
+            scheduledJobs.remove(jobId);
+        }
 
         job.setStatus(Job.Status.STOPPED);
         jobStore.save(job);
@@ -102,6 +104,7 @@ public class SpringScheduler implements Scheduler {
         };
 
         // FIXME: can we have an actual result here?
+        // FIXME: when starting a job from DB: net.cpollet.scheduler.datastore.nitrite.converters.TriggerConverter$1 cannot be cast to net.cpollet.scheduler.engine.internals.spring.SpringTrigger
         ScheduledFuture<?> future = taskScheduler.schedule(runnable, ((SpringTrigger) job.getTrigger()).trigger());
         scheduledJobs.put(job.getJobId(), future);
 

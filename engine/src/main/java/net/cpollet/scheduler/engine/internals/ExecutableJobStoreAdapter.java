@@ -20,30 +20,30 @@ public class ExecutableJobStoreAdapter implements Store<ExecutableJob, JobId> {
     @Override
     public void save(ExecutableJob job) {
         jobStore.save(job);
-        cache.put(job.getJobId(), job);
+//        cache.put(job.getJobId(), job);
     }
 
     @Override
     public void delete(JobId jobId) {
         jobStore.delete(jobId);
-        cache.remove(jobId);
+//        cache.remove(jobId);
     }
 
     @Override
-    public ExecutableJob get(JobId jobId)  {
+    public ExecutableJob get(JobId jobId) {
         return makeExecutable(jobStore.get(jobId));
     }
 
     private ExecutableJob makeExecutable(Job job) {
-        if (cache.containsKey(job.getJobId())) {
-            return cache.get(job.getJobId());
-        }
+//        if (cache.containsKey(job.getJobId())) {
+//            return cache.get(job.getJobId());
+//        }
 
         // FIXME this does not maintain the JobId, when coming from JobStore!
-        ExecutableJob executableJob = jobFactory.create(job.getType(), job.getParameters(), job.getTrigger());
+        ExecutableJob executableJob = jobFactory.restore(job.getJobId(), job.getType(), job.getParameters(), job.getTrigger());
         executableJob.setStatus(job.getStatus());
 
-        cache.put(job.getJobId(), executableJob);
+//        cache.put(job.getJobId(), executableJob);
 
         return executableJob;
     }
