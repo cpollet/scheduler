@@ -2,8 +2,9 @@ package net.cpollet.scheduler.engine.api;
 
 import java.util.Arrays;
 
+// FIXME could be an abstract class
 public interface Trigger {
-    Type getType();
+    Type getType(); // FIXME is that still useful?
 
     enum Type {
         CRON(CronTrigger.class),

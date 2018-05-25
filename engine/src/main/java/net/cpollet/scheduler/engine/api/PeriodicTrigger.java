@@ -1,5 +1,6 @@
 package net.cpollet.scheduler.engine.api;
 
+// FIXME could be an actual class
 public interface PeriodicTrigger extends Trigger {
     Long getPeriod();
 

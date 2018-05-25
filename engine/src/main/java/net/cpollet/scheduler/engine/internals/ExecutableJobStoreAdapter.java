@@ -39,6 +39,7 @@ public class ExecutableJobStoreAdapter implements Store<ExecutableJob, JobId> {
             return cache.get(job.getJobId());
         }
 
+        // FIXME this does not maintain the JobId, when coming from JobStore!
         ExecutableJob executableJob = jobFactory.create(job.getType(), job.getParameters(), job.getTrigger());
         executableJob.setStatus(job.getStatus());
 
