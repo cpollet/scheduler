@@ -8,7 +8,7 @@ import org.springframework.scheduling.Trigger;
 
 @AllArgsConstructor
 @Getter
-public class SpringCronTrigger extends AbstractTrigger implements SpringTrigger, CronTrigger {
+public class SpringCronTrigger extends SpringTrigger implements CronTrigger {
     private final String expression;
 
     @Override

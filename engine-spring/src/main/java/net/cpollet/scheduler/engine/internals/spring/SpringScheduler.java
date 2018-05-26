@@ -103,9 +103,10 @@ public class SpringScheduler implements Scheduler {
             ExecutionResult execution = job.execute(executionContext);
         };
 
+        SpringTrigger trigger = SpringTrigger.from(job.getTrigger());
+
         // FIXME: can we have an actual result here?
-        // FIXME: when starting a job from DB: net.cpollet.scheduler.datastore.nitrite.converters.TriggerConverter$1 cannot be cast to net.cpollet.scheduler.engine.internals.spring.SpringTrigger
-        ScheduledFuture<?> future = taskScheduler.schedule(runnable, ((SpringTrigger) job.getTrigger()).trigger());
+        ScheduledFuture<?> future = taskScheduler.schedule(runnable, trigger.trigger());
         scheduledJobs.put(job.getJobId(), future);
 
         job.setStatus(Job.Status.RUNNING);

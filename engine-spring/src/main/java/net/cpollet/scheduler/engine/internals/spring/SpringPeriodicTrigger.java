@@ -8,7 +8,7 @@ import org.springframework.scheduling.Trigger;
 
 @Getter
 @AllArgsConstructor
-public class SpringPeriodicTrigger extends AbstractTrigger implements SpringTrigger, PeriodicTrigger {
+public class SpringPeriodicTrigger extends SpringTrigger implements PeriodicTrigger {
     private final Long period;
     private final Unit unit;
 
