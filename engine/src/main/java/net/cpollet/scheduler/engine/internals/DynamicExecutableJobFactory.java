@@ -46,15 +46,7 @@ public class DynamicExecutableJobFactory implements ExecutableJobFactory {
 
     @Override
     public ExecutableJob create(String type, Map<String, List<String>> parameters, Trigger trigger) throws JobNameNotRegisteredException {
-        if (!clazz.containsKey(type)) {
-            throw new JobNameNotRegisteredException(type);
-        }
-
-        try {
-            return clazz.get(type).getConstructor(JobId.class, Map.class, Trigger.class).newInstance(new JobId(), parameters, trigger);
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
-            throw new InvalidJobClassException(clazz.get(type), type, e);
-        }
+        return restore(new JobId(), type, parameters, trigger);
     }
 
     @Override
