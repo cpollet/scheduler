@@ -16,7 +16,6 @@
         <module>datastore-inmemory</module>
         <module>datastore-nitrite</module>
         <module>ws</module>
-        <module>test</module>
     </modules>
 
     <properties>
@@ -55,7 +54,6 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
 
     <build>
         <pluginManagement>
