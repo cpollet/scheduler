@@ -1,12 +1,14 @@
 package net.cpollet.scheduler.engine.internals;
 
+import net.cpollet.scheduler.engine.api.ExecutionContext;
+import net.cpollet.scheduler.engine.api.ExecutionResult;
+import net.cpollet.scheduler.engine.api.JobId;
 import net.cpollet.scheduler.engine.api.exception.InvalidJobClassException;
 import net.cpollet.scheduler.engine.api.exception.JobNameNotRegisteredException;
 import net.cpollet.scheduler.engine.api.Trigger;
 import net.cpollet.scheduler.engine.internals.job.ExecutableJob;
-import net.cpollet.scheduler.test.stub.engine.internals.job.DummyExecutableJobStub;
-import net.cpollet.scheduler.test.stub.engine.internals.job.InvalidExecutableJobStub;
-import net.cpollet.scheduler.test.stub.engine.internals.job.UnnamedJobStub;
+import net.cpollet.scheduler.engine.internals.job.JobTypeName;
+import net.cpollet.scheduler.engine.internals.job.Logger;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,31 +17,31 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class DynamicExecutableJobFactoryTest {
+class DynamicExecutableJobFactoryTest {
     private DynamicExecutableJobFactory factory;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         factory = new DynamicExecutableJobFactory();
-        factory.register(new String[]{"net.cpollet.scheduler.test.stub.engine.internals.job"});
+        factory.register(new String[]{getClass().getPackage().getName()});
     }
 
     @Test
-    public void create_returnsExecutableJob() {
+    void create_returnsExecutableJob() {
         // GIVEN
         Map<String, List<String>> parameters = null;
         Trigger trigger = null;
 
         // WHEN
-        ExecutableJob job = factory.create("Dummy", parameters, trigger);
+        ExecutableJob job = factory.create("Named", parameters, trigger);
 
         // THEN
         Assertions.assertThat(job)
-                .isInstanceOf(DummyExecutableJobStub.class);
+                .isInstanceOf(NamedExecutableJob.class);
     }
 
     @Test
-    public void create_throwsException_whenJobTypeNotRegistered() {
+    void create_throwsException_whenJobTypeNotRegistered() {
         // GIVEN
         Map<String, List<String>> parameters = null;
         Trigger trigger = null;
@@ -54,7 +56,7 @@ public class DynamicExecutableJobFactoryTest {
     }
 
     @Test
-    public void create_throwsException_whenJobClassIsInvalid() {
+    void create_throwsException_whenJobClassIsInvalid() {
         // GIVEN
         Map<String, List<String>> parameters = null;
         Trigger trigger = null;
@@ -65,20 +67,56 @@ public class DynamicExecutableJobFactoryTest {
         // THEN
         Assertions.assertThat(thrown)
                 .isInstanceOf(InvalidJobClassException.class)
-                .hasMessage("Unable to instantiate class [" + InvalidExecutableJobStub.class.getCanonicalName() + "] for job type [Invalid]");
+                .hasMessage("Unable to instantiate class [" + InvalidExecutableJob.class.getCanonicalName() + "] for job type [Invalid]");
     }
 
     @Test
-    public void getValidJobTypes_returnsTheListOfJobTypes() {
+    void getValidJobTypes_returnsTheListOfJobTypes() {
         // WHEN
         Set<String> jobTypes = factory.getValidJobTypes();
 
         // THEN
         Assertions.assertThat(jobTypes)
                 .containsExactlyInAnyOrder(
-                        "Dummy",
+                        "Named",
                         "Invalid",
-                        UnnamedJobStub.class.getCanonicalName()
+                        UnnamedExecutableJob.class.getCanonicalName(),
+                        "Logger" // probably we want to get rid of it here...
                 );
+    }
+
+    @JobTypeName("Named")
+    private static class NamedExecutableJob extends ExecutableJob {
+        public NamedExecutableJob(JobId jobId, Map<String, List<String>> parameters, Trigger trigger) {
+            super(jobId, parameters, trigger, Status.STOPPED);
+        }
+
+        @Override
+        public ExecutionResult execute(ExecutionContext executionContext) {
+            return null;
+        }
+    }
+
+    @JobTypeName("Invalid")
+    private static class InvalidExecutableJob extends ExecutableJob {
+        public InvalidExecutableJob(JobId jobId, Map<String, List<String>> parameters, Trigger trigger, Status status) {
+            super(jobId, parameters, trigger, status);
+        }
+
+        @Override
+        public ExecutionResult execute(ExecutionContext executionContext) {
+            return null;
+        }
+    }
+
+    private static class UnnamedExecutableJob extends ExecutableJob {
+        public UnnamedExecutableJob(JobId jobId, Map<String, List<String>> parameters, Trigger trigger) {
+            super(jobId, parameters, trigger, Status.STOPPED);
+        }
+
+        @Override
+        public ExecutionResult execute(ExecutionContext executionContext) {
+            return null;
+        }
     }
 }

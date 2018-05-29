@@ -1,34 +1,41 @@
 package net.cpollet.scheduler.engine.internals.job;
 
-import net.cpollet.scheduler.test.stub.engine.internals.job.DummyExecutableJobStub;
-import net.cpollet.scheduler.test.stub.engine.internals.job.UnnamedJobStub;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class JobTypeNameReaderTest {
+class JobTypeNameReaderTest {
     @Test
-    public void read_returnsJobTypeNameAnnotationValue_whenPresent() {
+    void read_returnsJobTypeNameAnnotationValue_whenPresent() {
         // GIVEN
-        JobTypeNameReader reader = new JobTypeNameReader(DummyExecutableJobStub.class);
+        JobTypeNameReader reader = new JobTypeNameReader(Named.class);
 
         // WHEN
         String name = reader.read();
 
         // THEN
         Assertions.assertThat(name)
-                .isEqualTo("Dummy");
+                .isEqualTo("Named");
     }
 
     @Test
-    public void read_returnsCanonicalClassName_whenAnnotationNotPresent() {
+    void read_returnsCanonicalClassName_whenAnnotationNotPresent() {
         // GIVEN
-        JobTypeNameReader reader = new JobTypeNameReader(UnnamedJobStub.class);
+        JobTypeNameReader reader = new JobTypeNameReader(Unnamed.class);
 
         // WHEN
         String name = reader.read();
 
         // THEN
         Assertions.assertThat(name)
-                .isEqualTo(UnnamedJobStub.class.getCanonicalName());
+                .isEqualTo(Unnamed.class.getCanonicalName());
+    }
+
+    @JobTypeName("Named")
+    private class Named {
+        // nothing
+    }
+
+    private class Unnamed {
+        // nothing
     }
 }

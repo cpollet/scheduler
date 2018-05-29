@@ -28,7 +28,6 @@ public class SpringSchedulerTest {
     private TaskScheduler taskScheduler;
     private ExecutableJobStoreAdapter jobStore;
     private ExecutableJobFactory jobFactory;
-    private Trigger springTrigger;
     private JobId jobId;
 
     @BeforeEach
@@ -39,9 +38,9 @@ public class SpringSchedulerTest {
 
         scheduler = new SpringScheduler(taskScheduler, jobStore, jobFactory);
 
-        springTrigger = new TriggerStub();
-        SpringTrigger trigger = Mockito.mock(SpringTrigger.class);
-        Mockito.when(trigger.trigger()).thenReturn(springTrigger);
+        SpringCronTrigger trigger = Mockito.mock(SpringCronTrigger.class);
+        Mockito.when(trigger.getType()).thenReturn(net.cpollet.scheduler.engine.api.Trigger.Type.CRON);
+        Mockito.when(trigger.getExpression()).thenReturn("* * * * * *");
 
         ExecutableJob job = new ExecutableJobStub(new JobId(), null, trigger, Job.Status.STOPPED);
         jobId = job.getJobId();
@@ -60,7 +59,7 @@ public class SpringSchedulerTest {
 
         // THEN
         Mockito.verify(taskScheduler, Mockito.times(1))
-                .schedule(Mockito.any(), ArgumentMatchers.eq(springTrigger));
+                .schedule(Mockito.any(), ArgumentMatchers.isA(Trigger.class));
 
         Assertions.assertThat(startedJob.getStatus())
                 .isEqualTo(Job.Status.RUNNING);
@@ -86,7 +85,7 @@ public class SpringSchedulerTest {
 
         // THEN
         Mockito.verify(taskScheduler, Mockito.times(1))
-                .schedule(Mockito.any(), ArgumentMatchers.eq(springTrigger));
+                .schedule(Mockito.any(), ArgumentMatchers.isA(Trigger.class));
 
         Assertions.assertThat(startedJob.getStatus())
                 .isEqualTo(Job.Status.RUNNING);
@@ -118,7 +117,7 @@ public class SpringSchedulerTest {
                 .isEqualTo(Job.Status.RUNNING);
 
         Mockito.verify(taskScheduler, Mockito.never())
-                .schedule(Mockito.any(), ArgumentMatchers.eq(springTrigger));
+                .schedule(Mockito.any(), ArgumentMatchers.isA(Trigger.class));
 
         Mockito.verify(jobStore, Mockito.never()).save(ArgumentMatchers.any());
     }

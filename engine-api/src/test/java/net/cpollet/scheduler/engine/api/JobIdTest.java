@@ -3,9 +3,9 @@ package net.cpollet.scheduler.engine.api;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class JobIdTest {
+class JobIdTest {
     @Test
-    public void new_areEqual_whenUsingSameIds() {
+    void new_areEqual_whenUsingSameIds() {
         // GIVEN
         JobId existingJobId = new JobId();
 
@@ -19,7 +19,7 @@ public class JobIdTest {
     }
 
     @Test
-    public void new_throwsException_whenIdIsInvalidId() {
+    void new_throwsException_whenIdIsInvalidId() {
         // GIVEN
         String invalidId="invalid";
 
