@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @AllArgsConstructor
-public class CachedExecutableJobStoreAdapter implements Store<ExecutableJob, JobId> {
+public class CachedJobStoreAdapter implements Store<ExecutableJob, JobId> {
     private final Store<ExecutableJob, JobId> delegate;
     private final Map<JobId, ExecutableJob> cache = new HashMap<>();
 

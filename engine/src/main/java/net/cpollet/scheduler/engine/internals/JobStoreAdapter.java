@@ -3,18 +3,15 @@ package net.cpollet.scheduler.engine.internals;
 import lombok.AllArgsConstructor;
 import net.cpollet.scheduler.engine.api.Job;
 import net.cpollet.scheduler.engine.api.JobId;
-import net.cpollet.scheduler.engine.api.JobStore;
 import net.cpollet.scheduler.engine.api.Store;
 import net.cpollet.scheduler.engine.internals.job.ExecutableJob;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
-public class ExecutableJobStoreAdapter implements Store<ExecutableJob, JobId> {
-    private final JobStore jobStore;
+public class JobStoreAdapter implements Store<ExecutableJob, JobId> {
+    private final Store<Job, JobId> jobStore;
     private final ExecutableJobFactory jobFactory;
 
     @Override

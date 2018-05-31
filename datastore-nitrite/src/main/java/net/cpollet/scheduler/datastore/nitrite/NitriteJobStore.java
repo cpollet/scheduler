@@ -5,7 +5,7 @@ import net.cpollet.scheduler.datastore.nitrite.converters.JobConverter;
 import net.cpollet.scheduler.datastore.nitrite.entities.internal.NitriteJob;
 import net.cpollet.scheduler.engine.api.Job;
 import net.cpollet.scheduler.engine.api.JobId;
-import net.cpollet.scheduler.engine.api.JobStore;
+import net.cpollet.scheduler.engine.api.Store;
 import net.cpollet.scheduler.engine.api.exception.ElementNotFoundException;
 import org.dizitart.no2.Nitrite;
 import org.dizitart.no2.objects.Cursor;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @AllArgsConstructor
-public class NitriteJobStore implements JobStore {
+public class NitriteJobStore implements Store<Job, JobId> {
     private final Nitrite db;
     private final JobConverter jobConverter;
 

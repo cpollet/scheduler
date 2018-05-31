@@ -9,14 +9,18 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 class CachedJobStoreAdapterTest {
-    private CachedExecutableJobStoreAdapter store;
+    private CachedJobStoreAdapter store;
     private Store<ExecutableJob, JobId> delegate;
 
     @BeforeEach
     void setup() {
-        //noinspection unchecked
-        delegate = Mockito.mock(Store.class);
-        store = new CachedExecutableJobStoreAdapter(delegate);
+        delegate = delegateStore();
+        store = new CachedJobStoreAdapter(delegate);
+    }
+
+    @SuppressWarnings("unchecked")
+    private Store<ExecutableJob, JobId> delegateStore() {
+        return Mockito.mock(Store.class);
     }
 
     @Test

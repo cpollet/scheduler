@@ -37,6 +37,13 @@
 
         <!-- test -->
         <dependency>
+            <!-- we *don't* want logs to shop up in tests -->
+            <!-- replace with slf4j-simple in case you *really* want to see them -->
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-nop</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
             <scope>test</scope>

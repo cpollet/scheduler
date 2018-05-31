@@ -1,7 +1,8 @@
 package net.cpollet.scheduler.engine.internals;
 
 import net.cpollet.scheduler.engine.api.Job;
-import net.cpollet.scheduler.engine.api.JobStore;
+import net.cpollet.scheduler.engine.api.JobId;
+import net.cpollet.scheduler.engine.api.Store;
 import net.cpollet.scheduler.engine.internals.job.ExecutableJob;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,9 +13,9 @@ import org.mockito.Mockito;
 import java.util.Arrays;
 import java.util.Collection;
 
-class ExecutableJobStoreAdapterTest {
-    private ExecutableJobStoreAdapter adapter;
-    private JobStore jobStore;
+class JobStoreAdapterTest {
+    private JobStoreAdapter adapter;
+    private Store<Job, JobId> jobStore;
 
     @BeforeEach
     void setup() {
@@ -22,8 +23,13 @@ class ExecutableJobStoreAdapterTest {
         Mockito.when(jobFactory.restore(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any()))
                 .thenReturn(Mockito.mock(ExecutableJob.class));
 
-        jobStore = Mockito.mock(JobStore.class);
-        adapter = new ExecutableJobStoreAdapter(jobStore, jobFactory);
+        jobStore = jobStore();
+        adapter = new JobStoreAdapter(jobStore, jobFactory);
+    }
+
+    @SuppressWarnings("unchecked")
+    private Store<Job, JobId> jobStore() {
+        return Mockito.mock(Store.class);
     }
 
     @Test

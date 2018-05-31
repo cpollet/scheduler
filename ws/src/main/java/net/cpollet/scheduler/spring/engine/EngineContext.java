@@ -1,9 +1,11 @@
 package net.cpollet.scheduler.spring.engine;
 
+import net.cpollet.scheduler.engine.api.Job;
+import net.cpollet.scheduler.engine.api.JobId;
 import net.cpollet.scheduler.engine.api.Scheduler;
-import net.cpollet.scheduler.engine.api.JobStore;
+import net.cpollet.scheduler.engine.api.Store;
 import net.cpollet.scheduler.engine.internals.DynamicExecutableJobFactory;
-import net.cpollet.scheduler.engine.internals.ExecutableJobStoreAdapter;
+import net.cpollet.scheduler.engine.internals.JobStoreAdapter;
 import net.cpollet.scheduler.engine.internals.spring.SpringScheduler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,12 +32,12 @@ public class EngineContext {
     }
 
     @Bean
-    public ExecutableJobStoreAdapter executableJobStoreAdapter(JobStore jobStore, DynamicExecutableJobFactory jobFactory) {
-        return new ExecutableJobStoreAdapter(jobStore, jobFactory);
+    public JobStoreAdapter executableJobStoreAdapter(Store<Job, JobId> jobStore, DynamicExecutableJobFactory jobFactory) {
+        return new JobStoreAdapter(jobStore, jobFactory);
     }
 
     @Bean
-    public Scheduler Scheduler(TaskScheduler taskScheduler, ExecutableJobStoreAdapter executableJobStore, DynamicExecutableJobFactory jobFactory) {
+    public Scheduler Scheduler(TaskScheduler taskScheduler, JobStoreAdapter executableJobStore, DynamicExecutableJobFactory jobFactory) {
         return new SpringScheduler(taskScheduler, executableJobStore, jobFactory);
     }
 }

@@ -1,15 +1,15 @@
 package net.cpollet.scheduler.datastore.inmemory;
 
+import net.cpollet.scheduler.engine.api.Store;
 import net.cpollet.scheduler.engine.api.exception.ElementNotFoundException;
 import net.cpollet.scheduler.engine.api.Job;
 import net.cpollet.scheduler.engine.api.JobId;
-import net.cpollet.scheduler.engine.api.JobStore;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class InMemoryJobStore implements JobStore {
+public class InMemoryJobStore implements Store<Job, JobId> {
     private final Map<JobId, Job> jobs;
 
     public InMemoryJobStore() {

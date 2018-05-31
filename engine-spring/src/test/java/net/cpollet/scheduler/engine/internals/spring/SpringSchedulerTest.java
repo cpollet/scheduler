@@ -5,10 +5,9 @@ import net.cpollet.scheduler.engine.api.Job;
 import net.cpollet.scheduler.engine.api.JobId;
 import net.cpollet.scheduler.engine.api.PeriodicTrigger;
 import net.cpollet.scheduler.engine.internals.ExecutableJobFactory;
-import net.cpollet.scheduler.engine.internals.ExecutableJobStoreAdapter;
+import net.cpollet.scheduler.engine.internals.JobStoreAdapter;
 import net.cpollet.scheduler.engine.internals.job.ExecutableJob;
 import net.cpollet.scheduler.test.stub.engine.internals.job.ExecutableJobStub;
-import net.cpollet.scheduler.test.stub.engine.internals.spring.TriggerStub;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,17 +22,17 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.concurrent.ScheduledFuture;
 
-public class SpringSchedulerTest {
+class SpringSchedulerTest {
     private SpringScheduler scheduler;
     private TaskScheduler taskScheduler;
-    private ExecutableJobStoreAdapter jobStore;
+    private JobStoreAdapter jobStore;
     private ExecutableJobFactory jobFactory;
     private JobId jobId;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         taskScheduler = Mockito.mock(TaskScheduler.class);
-        jobStore = Mockito.mock(ExecutableJobStoreAdapter.class);
+        jobStore = Mockito.mock(JobStoreAdapter.class);
         jobFactory = Mockito.mock(ExecutableJobFactory.class);
 
         scheduler = new SpringScheduler(taskScheduler, jobStore, jobFactory);
@@ -53,7 +52,7 @@ public class SpringSchedulerTest {
     }
 
     @Test
-    public void schedule_schedulesJob() {
+    void schedule_schedulesJob() {
         // WHEN
         Job startedJob = scheduler.schedule(1L, PeriodicTrigger.Unit.SECOND, "type", null);
 
@@ -66,7 +65,7 @@ public class SpringSchedulerTest {
     }
 
     @Test
-    public void schedule_savesJob() {
+    void schedule_savesJob() {
         // WHEN
         scheduler.schedule(1L, PeriodicTrigger.Unit.SECOND, "type", null);
 
@@ -79,7 +78,7 @@ public class SpringSchedulerTest {
     }
 
     @Test
-    public void start_schedulesJob() {
+    void start_schedulesJob() {
         // WHEN
         Job startedJob = scheduler.start(jobId);
 
@@ -92,7 +91,7 @@ public class SpringSchedulerTest {
     }
 
     @Test
-    public void start_savesJob() {
+    void start_savesJob() {
         // WHEN
         scheduler.start(jobId);
 
@@ -105,7 +104,7 @@ public class SpringSchedulerTest {
     }
 
     @Test
-    public void start_isNoOp_whenJobStarted() {
+    void start_isNoOp_whenJobStarted() {
         // GIVEN
         jobStore.get(jobId).setStatus(Job.Status.RUNNING);
 
@@ -123,11 +122,10 @@ public class SpringSchedulerTest {
     }
 
     @Test
-    public void stop_stopsJob() {
+    void stop_stopsJob() {
         // GIVEN
         ScheduledFuture future = Mockito.mock(ScheduledFuture.class);
-        Mockito.when(taskScheduler.schedule(ArgumentMatchers.any(), ArgumentMatchers.<Trigger>any()))
-                .thenReturn(future);
+        configureTaskScheduler(ArgumentMatchers.any(), ArgumentMatchers.any(), future);
 
         Job stoppedJob = scheduler.start(jobId);
 
@@ -142,12 +140,17 @@ public class SpringSchedulerTest {
                 .cancel(true);
     }
 
+    @SuppressWarnings("unchecked")
+    private void configureTaskScheduler(Runnable task, Trigger trigger, ScheduledFuture future) {
+        Mockito.when(taskScheduler.schedule(task, trigger))
+                .thenReturn(future);
+    }
+
     @Test
-    public void stop_savesJob() {
+    void stop_savesJob() {
         // GIVEN
         ScheduledFuture future = Mockito.mock(ScheduledFuture.class);
-        Mockito.when(taskScheduler.schedule(ArgumentMatchers.any(), ArgumentMatchers.<Trigger>any()))
-                .thenReturn(future);
+        configureTaskScheduler(ArgumentMatchers.any(), ArgumentMatchers.any(), future);
 
         scheduler.start(jobId);
 
@@ -162,11 +165,10 @@ public class SpringSchedulerTest {
     }
 
     @Test
-    public void stop_isNoOp_whenJobStopped() {
+    void stop_isNoOp_whenJobStopped() {
         // GIVEN
         ScheduledFuture future = Mockito.mock(ScheduledFuture.class);
-        Mockito.when(taskScheduler.schedule(ArgumentMatchers.any(), ArgumentMatchers.<Trigger>any()))
-                .thenReturn(future);
+        configureTaskScheduler(ArgumentMatchers.any(), ArgumentMatchers.any(), future);
 
         // WHEN
         Job stoppedJob = scheduler.stop(jobId);
@@ -182,11 +184,10 @@ public class SpringSchedulerTest {
     }
 
     @Test
-    public void delete_stopsJob() {
+    void delete_stopsJob() {
         // GIVEN
         ScheduledFuture future = Mockito.mock(ScheduledFuture.class);
-        Mockito.when(taskScheduler.schedule(ArgumentMatchers.any(), ArgumentMatchers.<Trigger>any()))
-                .thenReturn(future);
+        configureTaskScheduler(ArgumentMatchers.any(), ArgumentMatchers.any(), future);
 
         scheduler.start(jobId);
 
@@ -202,11 +203,10 @@ public class SpringSchedulerTest {
     }
 
     @Test
-    public void delete_deletesJob() {
+    void delete_deletesJob() {
         // GIVEN
         ScheduledFuture future = Mockito.mock(ScheduledFuture.class);
-        Mockito.when(taskScheduler.schedule(ArgumentMatchers.any(), ArgumentMatchers.<Trigger>any()))
-                .thenReturn(future);
+        configureTaskScheduler(ArgumentMatchers.any(), ArgumentMatchers.any(), future);
 
         scheduler.start(jobId);
 
@@ -219,7 +219,7 @@ public class SpringSchedulerTest {
     }
 
     @Test
-    public void allJobs_returnsAllJobs() {
+    void allJobs_returnsAllJobs() {
         // GIVEN
         ExecutableJob job1 = new ExecutableJobStub(new JobId(), null, null, Job.Status.STOPPED);
         ExecutableJob job2 = new ExecutableJobStub(new JobId(), null, null, Job.Status.STOPPED);
@@ -234,7 +234,7 @@ public class SpringSchedulerTest {
     }
 
     @Test
-    public void validJobTypes_returnsValidJobTypes() {
+    void validJobTypes_returnsValidJobTypes() {
         // GIVEN
         Mockito.when(jobFactory.getValidJobTypes())
                 .thenReturn(ImmutableSet.of("Type1", "Type2"));
